@@ -7,7 +7,7 @@ RSpec.describe 'the items API' do
     create_list(:item, 1, merchant_id: id)
     create_list(:item, 2, merchant_id: id_2)
 
-    get '/api/v1/items'
+    get api_v1_items_path
 
     items = JSON.parse(response.body, symbolize_names: true)
     
@@ -31,7 +31,7 @@ RSpec.describe 'the items API' do
     id = create(:merchant).id 
     item_id = create(:item, merchant_id: id).id
 
-    get "/api/v1/items/#{item_id}"
+    get api_v1_item_path(item_id)
     
     item = JSON.parse(response.body, symbolize_names: true)
     
@@ -60,7 +60,7 @@ RSpec.describe 'the items API' do
 
     headers = {"CONTENT_TYPE" => "application/json"}
 
-    post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+    post api_v1_items_path, headers: headers, params: JSON.generate(item: item_params)
 
     created_item = Item.last
       
@@ -77,7 +77,7 @@ RSpec.describe 'the items API' do
     id = create(:merchant).id 
     item_id = create(:item, merchant_id: id).id
 
-    get "/api/v1/items/#{item_id}/edit"
+    get edit_api_v1_item_path(item_id)
 
     item = JSON.parse(response.body, symbolize_names: true)
     
@@ -101,7 +101,7 @@ RSpec.describe 'the items API' do
    
     expect(Item.count).to eq(1)
 
-    delete "/api/v1/items/#{item.id}"
+    delete api_v1_item_path(item.id)
 
     expect(response).to be_successful
     expect(Item.count).to eq(0)
@@ -112,8 +112,8 @@ RSpec.describe 'the items API' do
     id = create(:merchant).id 
     item = create(:item, merchant_id: id)
 
-    get "/api/v1/items/#{item.id}/merchants/#{item.merchant_id}"
-
+    get api_v1_item_merchant_path(item.id, item.merchant_id)
+    
     merchant = JSON.parse(response.body, symbolize_names: true)
 
     expect(response).to be_successful

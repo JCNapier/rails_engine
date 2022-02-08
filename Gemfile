@@ -34,6 +34,7 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'simplecov'
   gem 'jsonapi-serializer'
+  gem 'shoulda-matchers'
 end
 
 group :development do

@@ -7,7 +7,7 @@ Rails.application.routes.draw do
       end
       resources :items, only: [:index, :show, :create, :edit, :destroy] do 
         resources :merchants, only: [:show]
-      end
+      end 
     end
   end
 end

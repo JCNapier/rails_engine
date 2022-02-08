@@ -4,7 +4,7 @@ RSpec.describe 'the merchants API' do
   it 'sends a list of merchants' do 
     create_list(:merchant, 3)
 
-    get '/api/v1/merchants'
+    get api_v1_merchants_path
 
     merchants = JSON.parse(response.body, symbolize_names: true)
     
@@ -22,7 +22,7 @@ RSpec.describe 'the merchants API' do
   it 'can get one merchant by its id' do 
     id = create(:merchant).id 
 
-    get "/api/v1/merchants/#{id}"
+    get api_v1_merchant_path(id)
 
     merchant = JSON.parse(response.body, symbolize_names: true)
     
@@ -39,7 +39,7 @@ RSpec.describe 'the merchants API' do
     id = create(:merchant).id 
     create_list(:item, 3, merchant_id: id)
 
-    get "/api/v1/merchants/#{id}/items"
+    get api_v1_merchant_items_path(id)
 
     items = JSON.parse(response.body, symbolize_names: true)
     

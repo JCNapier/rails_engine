@@ -94,4 +94,35 @@ RSpec.describe 'the items API' do
     expect(item).to have_key(:merchant_id)
     expect(item[:merchant_id]).to be_a(Integer)
   end
+
+  it 'can destroy an item' do 
+    id = create(:merchant).id 
+    item = create(:item, merchant_id: id)
+
+    expect(Item.count).to eq(1)
+
+    delete "/api/v1/items/#{item.id}"
+
+    expect(response).to be_successful
+
+    expect(Item.count).to eq(0)
+    expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end
+
+  it 'can find a merchant with an item id' do 
+    id = create(:merchant).id 
+    item = create(:item, merchant_id: id)
+
+    get "/api/v1/items/#{item.id}/merchants/#{item.merchant_id}"
+
+    merchant = JSON.parse(response.body, symbolize_names: true)
+    
+    expect(response).to be_successful
+
+    expect(merchant).to have_key(:id)
+    expect(merchant[:id]).to eq(id)
+
+    expect(merchant).to have_key(:name)
+    expect(merchant[:name]).to be_a(String)
+  end
 end

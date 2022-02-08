@@ -4,8 +4,7 @@ RSpec.describe 'the merchants API' do
   it 'sends a list of merchants' do 
     create_list(:merchant, 3)
 
-    # get api_v1_merchants_path
-    get "/api/v1/merchants"
+    get api_v1_merchants_path
 
     merchant_json = JSON.parse(response.body, symbolize_names: true)
     

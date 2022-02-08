@@ -9,13 +9,12 @@ RSpec.describe 'the items API' do
 
     get api_v1_items_path
 
-    items = JSON.parse(response.body, symbolize_names: true)
-    
+    item_json = JSON.parse(response.body, symbolize_names: true)
+    items = item_json[:data]
+
     expect(response).to be_successful 
     
-    items[:data].each do |item| 
-      expect(item[:attributes]).to have_key(:id)
-      expect(item[:attributes][:id]).to be_a(Integer)
+    items.each do |item| 
       expect(item[:attributes]).to have_key(:name)
       expect(item[:attributes][:name]).to be_a(String)
       expect(item[:attributes]).to have_key(:description)
@@ -33,20 +32,19 @@ RSpec.describe 'the items API' do
 
     get api_v1_item_path(item_id)
     
-    item = JSON.parse(response.body, symbolize_names: true)
-    
+    item_json = JSON.parse(response.body, symbolize_names: true)
+    item = item_json[:data]
+
     expect(response).to be_successful
     
-    expect(item[:data][:attributes]).to have_key(:id)
-    expect(item[:data][:attributes][:id]).to be_a(Integer)
-    expect(item[:data][:attributes]).to have_key(:name)
-    expect(item[:data][:attributes][:name]).to be_a(String)
-    expect(item[:data][:attributes]).to have_key(:description)
-    expect(item[:data][:attributes][:description]).to be_a(String)
-    expect(item[:data][:attributes]).to have_key(:unit_price)
-    expect(item[:data][:attributes][:unit_price]).to be_a(Float)
-    expect(item[:data][:attributes]).to have_key(:merchant_id)
-    expect(item[:data][:attributes][:merchant_id]).to be_a(Integer)
+    expect(item[:attributes]).to have_key(:name)
+    expect(item[:attributes][:name]).to be_a(String)
+    expect(item[:attributes]).to have_key(:description)
+    expect(item[:attributes][:description]).to be_a(String)
+    expect(item[:attributes]).to have_key(:unit_price)
+    expect(item[:attributes][:unit_price]).to be_a(Float)
+    expect(item[:attributes]).to have_key(:merchant_id)
+    expect(item[:attributes][:merchant_id]).to be_a(Integer)
   end
 
   it 'can create an item' do 
@@ -63,7 +61,7 @@ RSpec.describe 'the items API' do
     post api_v1_items_path, headers: headers, params: JSON.generate(item: item_params)
 
     created_item = Item.last
-      
+    
     expect(response).to be_successful
 
     expect(created_item.id).to be_a(Integer)
@@ -73,26 +71,21 @@ RSpec.describe 'the items API' do
     expect(created_item.merchant_id).to be_a(Integer)
   end
 
-  it 'can edit an item' do 
-    id = create(:merchant).id 
-    item_id = create(:item, merchant_id: id).id
-
-    get edit_api_v1_item_path(item_id)
-
-    item = JSON.parse(response.body, symbolize_names: true)
+  it 'can update an item' do 
+    id = create(:item).id 
+    previous_name = Item.last.name
+    item_params = { name: "Alice In Chains Lego Set"}
+    headers = {"CONTENT_TYPE" => "application/json"}
+  # We include this header to make sure that these params 
+  #are passed as JSON rather than as plain text
+    
+    patch api_v1_item_path(id), headers: headers, params: JSON.generate({item: item_params})
+    
+    item = Item.find_by(id: id)
     
     expect(response).to be_successful
-
-    expect(item[:data][:attributes]).to have_key(:id)
-    expect(item[:data][:attributes][:id]).to be_a(Integer)
-    expect(item[:data][:attributes]).to have_key(:name)
-    expect(item[:data][:attributes][:name]).to be_a(String)
-    expect(item[:data][:attributes]).to have_key(:description)
-    expect(item[:data][:attributes][:description]).to be_a(String)
-    expect(item[:data][:attributes]).to have_key(:unit_price)
-    expect(item[:data][:attributes][:unit_price]).to be_a(Float)
-    expect(item[:data][:attributes]).to have_key(:merchant_id)
-    expect(item[:data][:attributes][:merchant_id]).to be_a(Integer)
+    expect(item.name).to_not eq(previous_name)
+    expect(item.name).to eq("Alice In Chains Lego Set")
   end
 
   it 'can destroy an item' do 
@@ -110,18 +103,16 @@ RSpec.describe 'the items API' do
 
   it 'can find a merchant with an item id' do 
     id = create(:merchant).id 
-    item = create(:item, merchant_id: id)
+    item_id = create(:item, merchant_id: id).id
 
-    get api_v1_item_merchant_path(item.id, item.merchant_id)
+    get "/api/v1/items/#{item_id}/merchant"
     
-    merchant = JSON.parse(response.body, symbolize_names: true)
-
+    merchant_json = JSON.parse(response.body, symbolize_names: true)
+    merchant = merchant_json[:data]
+    
     expect(response).to be_successful
-
-    expect(merchant[:data][:attributes]).to have_key(:id)
-    expect(merchant[:data][:attributes][:id]).to eq(id)
-
-    expect(merchant[:data][:attributes]).to have_key(:name)
-    expect(merchant[:data][:attributes][:name]).to be_a(String)
+    
+    expect(merchant[:attributes]).to have_key(:name)
+    expect(merchant[:attributes][:name]).to be_a(String)
   end
 end

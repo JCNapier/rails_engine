@@ -7,13 +7,15 @@ RSpec.describe 'the merchants API' do
     get '/api/v1/merchants'
 
     merchants = JSON.parse(response.body, symbolize_names: true)
-
+    
     expect(response).to be_successful
-    expect(merchants.count).to eq(3)
+    expect(merchants[:data].count).to eq(3)
 
-    merchants.each do |merchant|
-      expect(merchant).to have_key(:name)
-      expect(merchant[:name]).to be_a(String)
+    merchants[:data].each do |merchant|
+      expect(merchant[:attributes]).to have_key(:id)
+      expect(merchant[:attributes][:id]).to be_a(Integer)
+      expect(merchant[:attributes]).to have_key(:name)
+      expect(merchant[:attributes][:name]).to be_a(String)
     end
   end
 
@@ -23,14 +25,14 @@ RSpec.describe 'the merchants API' do
     get "/api/v1/merchants/#{id}"
 
     merchant = JSON.parse(response.body, symbolize_names: true)
-
+    
     expect(response).to be_successful
     
-    expect(merchant).to have_key(:id)
-    expect(merchant[:id]).to eq(id)
+    expect(merchant[:data][:attributes]).to have_key(:id)
+    expect(merchant[:data][:attributes][:id]).to eq(id)
 
-    expect(merchant).to have_key(:name)
-    expect(merchant[:name]).to be_a(String)
+    expect(merchant[:data][:attributes]).to have_key(:name)
+    expect(merchant[:data][:attributes][:name]).to be_a(String)
   end
 
   it 'can get all of the items associated with a merchant' do 
@@ -43,17 +45,17 @@ RSpec.describe 'the merchants API' do
     
     expect(response).to be_successful
 
-    items.each do |item| 
-      expect(item).to have_key(:id)
-      expect(item[:id]).to be_a(Integer)
-      expect(item).to have_key(:name)
-      expect(item[:name]).to be_a(String)
-      expect(item).to have_key(:description)
-      expect(item[:description]).to be_a(String)
-      expect(item).to have_key(:unit_price)
-      expect(item[:unit_price]).to be_a(Float)
-      expect(item).to have_key(:merchant_id)
-      expect(item[:merchant_id]).to be_a(Integer)
+    items[:data].each do |item| 
+      expect(item[:attributes]).to have_key(:id)
+      expect(item[:attributes][:id]).to be_a(Integer)
+      expect(item[:attributes]).to have_key(:name)
+      expect(item[:attributes][:name]).to be_a(String)
+      expect(item[:attributes]).to have_key(:description)
+      expect(item[:attributes][:description]).to be_a(String)
+      expect(item[:attributes]).to have_key(:unit_price)
+      expect(item[:attributes][:unit_price]).to be_a(Float)
+      expect(item[:attributes]).to have_key(:merchant_id)
+      expect(item[:attributes][:merchant_id]).to be_a(Integer)
     end
   end
 end

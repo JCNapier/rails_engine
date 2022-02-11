@@ -1,9 +1,7 @@
 class Api::V1::ItemSearchController < ApplicationController
   def search   
     if (params[:name].present? && !params[:min_price].present?) && (params[:name].present? && !params[:max_price].present?)
-      item_name = Item.where("lower(name) LIKE ?", "%#{params[:name].downcase}%")
-                      .order(:name)
-                      .first
+      item_name = Item.find_by_name(params[:name])
       if item_name == nil 
         render(json: {data: {message: "No Items Found"}})
       elsif item_name != nil 
@@ -14,9 +12,7 @@ class Api::V1::ItemSearchController < ApplicationController
     elsif params[:max_price].present? && params[:name].present?
       render(json: {error: "cannot pass max price and name params"}, status: 400)
     elsif params[:min_price].present?
-      item = Item.where("unit_price >= ?", (params[:min_price].to_f))
-                 .order(:name)
-                 .first
+      item = Item.find_by_min_price(params[:min_price])
       if (params[:min_price].to_f) < 0
         render(json: {error: "min_price can't be less than 0"}, status: 400)
       elsif item == nil
@@ -25,8 +21,7 @@ class Api::V1::ItemSearchController < ApplicationController
         render(json: ItemSerializer.new(item))
       end
     elsif params[:max_price].present?
-      item = Item.where("unit_price <= ?", (params[:max_price].to_f))
-                 .first
+      item = Item.find_by_max_price(params[:max_price])
       if (params[:max_price].to_f) < 0
         render(json: {error: "max_price can't be less than 0"}, status: 400)
       else 
@@ -35,10 +30,5 @@ class Api::V1::ItemSearchController < ApplicationController
     else 
       render(json: {data: {message: "Insufficient Params"}})
     end 
-  end
-
-  private 
-  def item_params 
-    params.require(:item).permit(:name, :description, :unit_price, :merchant_id)
   end
 end

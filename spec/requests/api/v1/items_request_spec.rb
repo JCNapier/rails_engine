@@ -88,6 +88,17 @@ RSpec.describe 'the items API' do
     expect(item.name).to eq("Alice In Chains Lego Set")
   end
 
+  it 'returns a 404 if an item cannot be updated' do 
+    id = create(:item).id 
+
+    item_params = { name: nil }
+    headers = {"CONTENT_TYPE" => "application/json"}
+
+    patch api_v1_item_path(id), headers: headers, params: JSON.generate({item: item_params})
+
+    expect(response).to_not be_successful
+  end
+
   it 'can destroy an item' do 
     id = create(:merchant).id 
     item = create(:item, merchant_id: id)

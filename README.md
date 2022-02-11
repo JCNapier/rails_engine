@@ -1,7 +1,14 @@
-# README
+# Rails Engin
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Description 
+
+You are working for a company developing an E-Commerce Application. Your team is working in a service-oriented architecture, meaning the front and back ends of this application are separate and communicate via APIs. Your job is to expose the data that powers the site through an API that the front end will consume. The organization of this project spec is by feature type.
+
+## Getting Started 
+
+``` 
+code block 
+```
 
 Things you may want to cover:
 

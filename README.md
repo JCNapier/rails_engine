@@ -44,6 +44,31 @@ gem 'jsonapi-serializer'
 ```
 [jsonapi-serializer Docs](https://github.com/jsonapi-serializer/jsonapi-serializer)
 
+##Rails_Helper 
+
+Add this to the top of your Rails Helper 
+``` 
+require 'simplecov'
+SimpleCov.start
+``` 
+This should be inside of your RSpec configure block
+```
+config.include FactoryBot::Syntax::Methods
+```
+
+This should be at the botttom of your rails helper 
+``` 
+Shoulda::Matchers.configure do |config|
+    config.integrate do |with|
+      with.test_framework :rspec
+
+      with.library :rails
+    end
+  end
+```
+
+
+
 Things you may want to cover:
 
 * Ruby version

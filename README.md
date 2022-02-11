@@ -23,6 +23,7 @@ Add the following gems to your gem file in the development/test group:
   gem 'shoulda-matchers'
 ``` 
 [shoulda-matchers Docs](https://github.com/thoughtbot/shoulda-matchers)
+
 [simplecov](https://github.com/simplecov-ruby/simplecov)
 
 Add the following gems to your gem file in the test group:

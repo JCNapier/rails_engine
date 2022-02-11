@@ -27,8 +27,6 @@ class Api::V1::ItemSearchController < ApplicationController
       else 
         render(json: ItemSerializer.new(item))
       end
-    else 
-      render(json: {data: {message: "Insufficient Params"}})
     end 
   end
 end

@@ -1,4 +1,4 @@
-# Rails Engin
+# Rails Engine
 
 ## Description 
 
@@ -69,22 +69,10 @@ Shoulda::Matchers.configure do |config|
 
 
 ## Database Creation and Initialization 
-Things you may want to cover:
 
-* Ruby version
+The data for this project is included in the repo. You will have to create and migrate the database in order for tests to pass. 
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```
+rails db:create 
+rails db:migrate 
+```

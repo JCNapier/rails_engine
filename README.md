@@ -44,7 +44,7 @@ gem 'jsonapi-serializer'
 ```
 [jsonapi-serializer Docs](https://github.com/jsonapi-serializer/jsonapi-serializer)
 
-##Rails_Helper 
+###Rails_Helper 
 
 Add this to the top of your Rails Helper 
 ``` 
